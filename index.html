@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hexatech — Gestão Inteligente de Varejo de Hardware e Eletrônicos</title>
+  <meta name="description" content="Controle total de estoque, baixa automática no caixa e gestão de capital de giro para lojas de componentes eletrônicos, ferramentas e periféricos." />
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            dark: {
+              900: '#0B132B',
+              800: '#0A192F',
+              700: '#1C2541',
+              600: '#2A3A5C',
+            },
+            cyan: {
+              electric: '#00F0FF',
+              soft: '#38BDF8',
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
+          },
+          boxShadow: {
+            'neo': '8px 8px 16px rgba(0,0,0,0.4), -8px -8px 16px rgba(255,255,255,0.03)',
+            'neo-inset': 'inset 4px 4px 8px rgba(0,0,0,0.3), inset -4px -4px 8px rgba(255,255,255,0.02)',
+            'glow': '0 0 20px rgba(0, 240, 255, 0.35)',
+            'glow-lg': '0 0 40px rgba(0, 240, 255, 0.45)',
+            'deep': '0 25px 50px -12px rgba(0, 0, 0, 0.6)',
+          },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'pulse-cyan': 'pulseCyan 2s ease-in-out infinite',
+            'fade-up': 'fadeUp 0.6s ease-out forwards',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-12px)' },
+            },
+            pulseCyan: {
+              '0%, 100%': { opacity: 1, boxShadow: '0 0 0 0 rgba(0, 240, 255, 0.4)' },
+              '50%': { opacity: 0.85, boxShadow: '0 0 0 8px rgba(0, 240, 255, 0)' },
+            },
+            fadeUp: {
+              '0%': { opacity: 0, transform: 'translateY(20px)' },
+              '100%': { opacity: 1, transform: 'translateY(0)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <style>
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Plus Jakarta Sans', Inter, system-ui, sans-serif; }
+    
+    .glass {
+      background: rgba(11, 19, 43, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    
+    .btn-glow {
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.35);
+      transition: all 0.3s ease;
+    }
+    .btn-glow:hover {
+      box-shadow: 0 0 32px rgba(0, 240, 255, 0.55);
+      transform: scale(1.03);
+    }
+    
+    .card-hover {
+      transition: all 0.3s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 240, 255, 0.08);
+    }
+    
+    .mockup-frame {
+      background: linear-gradient(145deg, #1a2332, #0f172a);
+      border: 1px solid rgba(0, 240, 255, 0.12);
+    }
+    
+    .scrollbar-thin::-webkit-scrollbar { width: 4px; height: 4px; }
+    .scrollbar-thin::-webkit-scrollbar-track { background: #0B132B; }
+    .scrollbar-thin::-webkit-scrollbar-thumb { background: #2A3A5C; border-radius: 4px; }
+    
+    .tour-btn.active {
+      background: rgba(0, 240, 255, 0.12);
+      color: #00F0FF;
+      border-color: rgba(0, 240, 255, 0.4);
+    }
+    
+    .mobile-menu {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+    .mobile-menu.open {
+      max-height: 400px;
+    }
+  </style>
+</head>
+<body class="bg-dark-900 text-white antialiased">
+
+  <!-- ==================== HEADER ==================== -->
+  <header id="header" class="fixed top-0 left-0 right-0 z-50 glass border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 lg:h-18">
+        <!-- Logo -->
+        <a href="#" class="flex items-center gap-2.5 group">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-electric/20 to-cyan-soft/10 border border-cyan-electric/30 flex items-center justify-center group-hover:shadow-glow transition-all">
+            <svg class="w-5 h-5 text-cyan-electric" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <span class="text-xl font-bold tracking-tight">Hexatech</span>
+        </a>
+
+        <!-- Desktop Nav -->
+        <nav class="hidden lg:flex items-center gap-8">
+          <a href="#solucoes" class="text-sm font-medium text-slate-300 hover:text-cyan-electric transition-colors">Soluções</a>
+          <a href="#recursos" class="text-sm font-medium text-slate-300 hover:text-cyan-electric transition-colors">Recursos</a>
+          <a href="#tour" class="text-sm font-medium text-slate-300 hover:text-cyan-electric transition-colors">Plataforma</a>
+          <a href="#beneficios" class="text-sm font-medium text-slate-300 hover:text-cyan-electric transition-colors">Benefícios</a>
+          <a href="#depoimentos" class="text-sm font-medium text-slate-300 hover:text-cyan-electric transition-colors">Depoimentos</a>
+        </nav>
+
+        <!-- CTA Desktop -->
+        <div class="hidden lg:block">
+          <a href="#cta" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-cyan-electric text-dark-900 font-semibold text-sm btn-glow">
+            Solicitar Demonstração
+          </a>
+        </div>
+
+        <!-- Mobile Hamburger -->
+        <button id="menuBtn" class="lg:hidden p-2 rounded-lg hover:bg-white/5 transition" aria-label="Menu">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div id="mobileMenu" class="mobile-menu lg:hidden border-t border-white/5">
+        <nav class="flex flex-col py-4 gap-1">
+          <a href="#solucoes" class="px-4 py-3 text-sm font-medium text-slate-300 hover:text-cyan-electric hover:bg-white/5 rounded-lg transition">Soluções</a>
+          <a href="#recursos" class="px-4 py-3 text-sm font-medium text-slate-300 hover:text-cyan-electric hover:bg-white/5 rounded-lg transition">Recursos</a>
+          <a href="#tour" class="px-4 py-3 text-sm font-medium text-slate-300 hover:text-cyan-electric hover:bg-white/5 rounded-lg transition">Plataforma</a>
+          <a href="#beneficios" class="px-4 py-3 text-sm font-medium text-slate-300 hover:text-cyan-electric hover:bg-white/5 rounded-lg transition">Benefícios</a>
+          <a href="#depoimentos" class="px-4 py-3 text-sm font-medium text-slate-300 hover:text-cyan-electric hover:bg-white/5 rounded-lg transition">Depoimentos</a>
+          <a href="#cta" class="mx-4 mt-2 text-center px-5 py-3 rounded-xl bg-cyan-electric text-dark-900 font-semibold text-sm">Solicitar Demonstração</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== HERO ==================== -->
+  <section class="relative min-h-screen pt-24 pb-16 lg:pt-32 lg:pb-24 overflow-hidden">
+    <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-cyan-electric/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3 pointer-events-none"></div>
+    <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-cyan-soft/5 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/4 pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        
+        <!-- Left Content -->
+        <div class="space-y-8">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-electric/10 border border-cyan-electric/20 text-cyan-electric text-xs font-semibold tracking-wide">
+            <span class="w-1.5 h-1.5 rounded-full bg-cyan-electric animate-pulse"></span>
+            Sistema Especialista em Varejo de Hardware
+          </div>
+
+          <h1 class="text-4xl sm:text-5xl lg:text-[3.25rem] font-bold leading-[1.15] tracking-tight">
+            Elimine perdas e acelere o atendimento no seu varejo de hardware.
+          </h1>
+
+          <p class="text-lg text-slate-300 leading-relaxed max-w-xl">
+            Controle total de estoque próximo a 100%, baixa automática no caixa e gestão inteligente de capital de giro em uma única plataforma.
+          </p>
+
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a href="#cta" class="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-cyan-electric text-dark-900 font-bold text-base btn-glow">
+              <i data-lucide="calendar" class="w-5 h-5"></i>
+              Agendar Demonstração
+            </a>
+            <a href="#tour" class="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl border border-white/15 text-white font-semibold text-base hover:bg-white/5 hover:border-cyan-electric/40 transition-all">
+              <i data-lucide="play-circle" class="w-5 h-5"></i>
+              Conhecer a Plataforma
+            </a>
+          </div>
+
+          <!-- Social Proof -->
+          <div class="flex items-center gap-4 pt-2">
+            <div class="flex -space-x-2">
+              <div class="w-9 h-9 rounded-full bg-gradient-to-br from-cyan-electric to-cyan-soft border-2 border-dark-900 flex items-center justify-center text-xs font-bold text-dark-900">JS</div>
+              <div class="w-9 h-9 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 border-2 border-dark-900 flex items-center justify-center text-xs font-bold">MR</div>
+              <div class="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 border-2 border-dark-900 flex items-center justify-center text-xs font-bold">AL</div>
+              <div class="w-9 h-9 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 border-2 border-dark-900 flex items-center justify-center text-xs font-bold">+177</div>
+            </div>
+            <p class="text-sm text-slate-400">
+              <span class="text-white font-semibold">+180 lojas</span> de eletrônicos confiam na Hexatech
+            </p>
+          </div>
+        </div>
+
+        <!-- Right: Dashboard Mockup -->
+        <div class="relative animate-float">
+          <div class="mockup-frame rounded-2xl p-1.5 shadow-deep">
+            <div class="flex items-center gap-2 px-4 py-2.5 bg-dark-800 rounded-t-xl border-b border-white/5">
+              <div class="flex gap-1.5">
+                <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+                <div class="w-3 h-3 rounded-full bg-amber-400/80"></div>
+                <div class="w-3 h-3 rounded-full bg-emerald-400/80"></div>
+              </div>
+              <div class="flex-1 text-center">
+                <span class="text-xs text-slate-500 font-medium">Hexatech Dashboard</span>
+              </div>
+            </div>
+            
+            <div class="bg-dark-900 rounded-b-xl p-4 space-y-4">
+              <div class="grid grid-cols-2 gap-3">
+                <div class="bg-dark-700 rounded-xl p-3 border border-white/5">
+                  <p class="text-[10px] text-slate-400 uppercase tracking-wider mb-1">Estoque em Risco</p>
+                  <p class="text-xl font-bold text-amber-400">12</p>
+                  <div class="mt-1 flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-cyan-electric animate-pulse-cyan"></span>
+                    <span class="text-[10px] text-cyan-electric">Alerta ativo</span>
+                  </div>
+                </div>
+                <div class="bg-dark-700 rounded-xl p-3 border border-white/5">
+                  <p class="text-[10px] text-slate-400 uppercase tracking-wider mb-1">Precisão</p>
+                  <p class="text-xl font-bold text-emerald-400">99.8%</p>
+                  <p class="text-[10px] text-slate-500 mt-1">Últimos 30 dias</p>
+                </div>
+              </div>
+
+              <div class="bg-dark-700 rounded-xl p-3 border border-white/5">
+                <div class="flex items-center justify-between mb-3">
+                  <p class="text-xs font-semibold text-slate-300">Giro de Estoque</p>
+                  <span class="text-[10px] text-cyan-electric">+14% este mês</span>
+                </div>
+                <div class="flex items-end gap-1.5 h-16">
+                  <div class="flex-1 bg-cyan-electric/20 rounded-t" style="height:40%"></div>
+                  <div class="flex-1 bg-cyan-electric/30 rounded-t" style="height:55%"></div>
+                  <div class="flex-1 bg-cyan-electric/40 rounded-t" style="height:45%"></div>
+                  <div class="flex-1 bg-cyan-electric/50 rounded-t" style="height:70%"></div>
+                  <div class="flex-1 bg-cyan-electric/60 rounded-t" style="height:60%"></div>
+                  <div class="flex-1 bg-cyan-electric/70 rounded-t" style="height:85%"></div>
+                  <div class="flex-1 bg-cyan-electric rounded-t" style="height:95%"></div>
+                </div>
+              </div>
+
+              <div class="bg-dark-700 rounded-xl border border-white/5 overflow-hidden">
+                <div class="px-3 py-2 border-b border-white/5 flex items-center justify-between">
+                  <p class="text-xs font-semibold text-slate-300">Produtos</p>
+                  <span class="text-[10px] px-2 py-0.5 rounded-full bg-cyan-electric/15 text-cyan-electric">Tempo real</span>
+                </div>
+                <div class="divide-y divide-white/5">
+                  <div class="px-3 py-2 flex items-center justify-between text-xs">
+                    <span class="text-slate-300 truncate">Arduino Uno R3</span>
+                    <span class="text-emerald-400 font-medium">Em estoque</span>
+                  </div>
+                  <div class="px-3 py-2 flex items-center justify-between text-xs">
+                    <span class="text-slate-300 truncate">Cabo USB-C 2m</span>
+                    <span class="text-amber-400 font-medium">Baixo</span>
+                  </div>
+                  <div class="px-3 py-2 flex items-center justify-between text-xs">
+                    <span class="text-slate-300 truncate">Multímetro Digital</span>
+                    <span class="text-emerald-400 font-medium">Em estoque</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="absolute -top-3 -right-3 px-3 py-1.5 rounded-full bg-cyan-electric text-dark-900 text-xs font-bold shadow-glow animate-pulse-cyan">
+            Recompra necessária
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== PROBLEMAS VS SOLUÇÕES ==================== -->
+  <section id="solucoes" class="py-20 lg:py-28 bg-dark-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-14">
+        <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
+          Desenvolvido para resolver os maiores gargalos do seu balcão
+        </h2>
+        <p class="text-slate-400 text-lg">
+          Cada funcionalidade foi pensada para o dia a dia de lojas de componentes, ferramentas e periféricos.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="card-hover bg-dark-700 rounded-2xl p-7 border border-white/5">
+          <div class="w-12 h-12 rounded-xl bg-cyan-electric/10 border border-cyan-electric/20 flex items-center justify-center mb-5">
+            <i data-lucide="zap" class="w-6 h-6 text-cyan-electric"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Atendimento Ágil</h3>
+          <p class="text-slate-400 leading-relaxed">
+            Consulta instantânea de localização e disponibilidade de componentes direto no balcão. Reduza filas e aumente a conversão.
+          </p>
+        </div>
+
+        <div class="card-hover bg-dark-700 rounded-2xl p-7 border border-white/5">
+          <div class="w-12 h-12 rounded-xl bg-cyan-electric/10 border border-cyan-electric/20 flex items-center justify-center mb-5">
+            <i data-lucide="check-circle-2" class="w-6 h-6 text-cyan-electric"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Precisão Absoluta</h3>
+          <p class="text-slate-400 leading-relaxed">
+            Baixa automática e imediata no estoque a cada venda finalizada. Zero vendas duplicadas e divergências.
+          </p>
+        </div>
+
+        <div class="card-hover bg-dark-700 rounded-2xl p-7 border border-white/5">
+          <div class="w-12 h-12 rounded-xl bg-cyan-electric/10 border border-cyan-electric/20 flex items-center justify-center mb-5">
+            <i data-lucide="trending-up" class="w-6 h-6 text-cyan-electric"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Capital Otimizado</h3>
+          <p class="text-slate-400 leading-relaxed">
+            Alertas inteligentes de ponto de recompra + identificação de produtos sem giro. Pare de congelar capital.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== RECURSOS TÉCNICOS ==================== -->
+  <section id="recursos" class="py-20 lg:py-28">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24">
+      
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div class="space-y-5">
+          <div class="inline-flex items-center gap-2 text-cyan-electric text-sm font-semibold">
+            <i data-lucide="barcode" class="w-4 h-4"></i>
+            Inventário Rotativo
+          </div>
+          <h3 class="text-3xl font-bold tracking-tight">Contagem e controle por código de barras</h3>
+          <p class="text-slate-400 text-lg leading-relaxed">
+            Auditoria completa de cada movimentação. Saiba exatamente o que entrou, saiu e onde está cada componente — em tempo real.
+          </p>
+          <ul class="space-y-3">
+            <li class="flex items-start gap-3">
+              <i data-lucide="check" class="w-5 h-5 text-cyan-electric mt-0.5 shrink-0"></i>
+              <span class="text-slate-300">Leitura de código de barras em segundos</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i data-lucide="check" class="w-5 h-5 text-cyan-electric mt-0.5 shrink-0"></i>
+              <span class="text-slate-300">Logs completos de cada ajuste de estoque</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i data-lucide="check" class="w-5 h-5 text-cyan-electric mt-0.5 shrink-0"></i>
+              <span class="text-slate-300">Progresso visual da contagem por seção</span>
+            </li>
+          </ul>
+        </div>
+        <div class="mockup-frame rounded-2xl p-4 shadow-deep">
+          <div class="bg-dark-900 rounded-xl p-4 space-y-3">
+            <div class="flex items-center justify-between">
+              <p class="text-sm font-semibold">Inventário em andamento</p>
+              <span class="text-xs text-cyan-electric">67% concluído</span>
+            </div>
+            <div class="w-full h-2 bg-dark-700 rounded-full overflow-hidden">
+              <div class="h-full bg-gradient-to-r from-cyan-soft to-cyan-electric rounded-full" style="width:67%"></div>
+            </div>
+            <div class="space-y-2 mt-4">
+              <div class="flex items-center justify-between text-xs bg-dark-700 rounded-lg px-3 py-2">
+                <span class="text-slate-300">Seção A — Componentes</span>
+                <span class="text-emerald-400">100%</span>
+              </div>
+              <div class="flex items-center justify-between text-xs bg-dark-700 rounded-lg px-3 py-2">
+                <span class="text-slate-300">Seção B — Cabos</span>
+                <span class="text-cyan-electric">72%</span>
+              </div>
+              <div class="flex items-center justify-between text-xs bg-dark-700 rounded-lg px-3 py-2">
+                <span class="text-slate-300">Seção C — Ferramentas</span>
+                <span class="text-slate-500">0%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div class="order-2 lg:order-1 mockup-frame rounded-2xl p-4 shadow-deep">
+          <div class="bg-dark-900 rounded-xl p-4">
+            <p class="text-sm font-semibold mb-4">Fluxo de Troca / Devolução</p>
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex-1 text-center">
+                <div class="w-10 h-10 mx-auto rounded-full bg-amber-500/20 border border-amber-500/40 flex items-center justify-center mb-2">
+                  <i data-lucide="package-x" class="w-5 h-5 text-amber-400"></i>
+                </div>
+                <p class="text-[10px] text-slate-400">Produto<br>devolvido</p>
+              </div>
+              <i data-lucide="arrow-right" class="w-4 h-4 text-slate-500 shrink-0"></i>
+              <div class="flex-1 text-center">
+                <div class="w-10 h-10 mx-auto rounded-full bg-cyan-electric/20 border border-cyan-electric/40 flex items-center justify-center mb-2">
+                  <i data-lucide="scan" class="w-5 h-5 text-cyan-electric"></i>
+                </div>
+                <p class="text-[10px] text-slate-400">Leitura<br>código</p>
+              </div>
+              <i data-lucide="arrow-right" class="w-4 h-4 text-slate-500 shrink-0"></i>
+              <div class="flex-1 text-center">
+                <div class="w-10 h-10 mx-auto rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center mb-2">
+                  <i data-lucide="package-plus" class="w-5 h-5 text-emerald-400"></i>
+                </div>
+                <p class="text-[10px] text-slate-400">Reentrada<br>automática</p>
+              </div>
+            </div>
+            <div class="mt-5 p-3 bg-dark-700 rounded-lg border border-emerald-500/20">
+              <p class="text-xs text-emerald-400 font-medium flex items-center gap-2">
+                <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+                Estoque atualizado em tempo real
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="order-1 lg:order-2 space-y-5">
+          <div class="inline-flex items-center gap-2 text-cyan-electric text-sm font-semibold">
+            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+            Trocas e Devoluções
+          </div>
+          <h3 class="text-3xl font-bold tracking-tight">Processamento rápido com reentrada automática</h3>
+          <p class="text-slate-400 text-lg leading-relaxed">
+            Trocas e devoluções são processadas em segundos. O estoque da loja é atualizado automaticamente — sem planilhas e sem erros.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div class="space-y-5">
+          <div class="inline-flex items-center gap-2 text-cyan-electric text-sm font-semibold">
+            <i data-lucide="history" class="w-4 h-4"></i>
+            Histórico Auditável
+          </div>
+          <h3 class="text-3xl font-bold tracking-tight">Registro completo de toda movimentação</h3>
+          <p class="text-slate-400 text-lg leading-relaxed">
+            Entrada, saída e transferência entre depósito e balcão. Filtros por data, produto, usuário e tipo de operação.
+          </p>
+        </div>
+        <div class="mockup-frame rounded-2xl p-4 shadow-deep">
+          <div class="bg-dark-900 rounded-xl p-4 space-y-3">
+            <p class="text-sm font-semibold mb-2">Timeline de Movimentações</p>
+            <div class="relative pl-5 space-y-4 before:absolute before:left-1.5 before:top-2 before:bottom-2 before:w-px before:bg-white/10">
+              <div class="relative">
+                <div class="absolute -left-5 top-1 w-3 h-3 rounded-full bg-emerald-400 border-2 border-dark-900"></div>
+                <p class="text-xs font-medium text-slate-200">Entrada — Arduino Uno x20</p>
+                <p class="text-[10px] text-slate-500">Hoje, 09:14 · João Silva</p>
+              </div>
+              <div class="relative">
+                <div class="absolute -left-5 top-1 w-3 h-3 rounded-full bg-cyan-electric border-2 border-dark-900"></div>
+                <p class="text-xs font-medium text-slate-200">Saída — Cabo USB-C x3</p>
+                <p class="text-[10px] text-slate-500">Hoje, 10:32 · Venda #4521</p>
+              </div>
+              <div class="relative">
+                <div class="absolute -left-5 top-1 w-3 h-3 rounded-full bg-amber-400 border-2 border-dark-900"></div>
+                <p class="text-xs font-medium text-slate-200">Transferência — Depósito → Balcão</p>
+                <p class="text-[10px] text-slate-500">Ontem, 16:45 · Maria Rocha</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== MÉTRICAS ==================== -->
+  <section id="beneficios" class="py-20 lg:py-24 bg-gradient-to-b from-dark-900 to-dark-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-3 gap-8 text-center">
+        <div class="space-y-3">
+          <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-cyan-electric/10 border border-cyan-electric/20 mb-2">
+            <i data-lucide="target" class="w-7 h-7 text-cyan-electric"></i>
+          </div>
+          <p class="text-5xl font-extrabold text-cyan-electric tracking-tight">99.8%</p>
+          <p class="text-lg font-semibold">Precisão de estoque</p>
+          <p class="text-sm text-slate-400">Alcançada pelas lojas que usam Hexatech</p>
+        </div>
+        <div class="space-y-3">
+          <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-cyan-electric/10 border border-cyan-electric/20 mb-2">
+            <i data-lucide="clock" class="w-7 h-7 text-cyan-electric"></i>
+          </div>
+          <p class="text-5xl font-extrabold text-cyan-electric tracking-tight">-70%</p>
+          <p class="text-lg font-semibold">Tempo de espera</p>
+          <p class="text-sm text-slate-400">Redução média nas filas do balcão</p>
+        </div>
+        <div class="space-y-3">
+          <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-cyan-electric/10 border border-cyan-electric/20 mb-2">
+            <i data-lucide="shield-check" class="w-7 h-7 text-cyan-electric"></i>
+          </div>
+          <p class="text-5xl font-extrabold text-cyan-electric tracking-tight">0%</p>
+          <p class="text-lg font-semibold">Vendas duplicadas</p>
+          <p class="text-sm text-slate-400">Por falta de sincronização de estoque</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== TOUR INTERATIVO ==================== -->
+  <section id="tour" class="py-20 lg:py-28">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-electric/10 border border-cyan-electric/20 text-cyan-electric text-xs font-semibold mb-5">
+          <i data-lucide="monitor" class="w-3.5 h-3.5"></i>
+          Tour pela Plataforma
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
+          Conheça o sistema por dentro
+        </h2>
+        <p class="text-slate-400 text-lg">
+          Explore as principais telas do Hexatech. Cada protótipo representa a experiência real do produto.
+        </p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="flex flex-wrap justify-center gap-2 mb-10">
+        <button onclick="showTab('login')" class="tour-btn active px-4 py-2 rounded-xl border border-white/10 text-sm font-medium transition-all" data-tab="login">Login</button>
+        <button onclick="showTab('dashboard')" class="tour-btn px-4 py-2 rounded-xl border border-white/10 text-sm font-medium text-slate-400 hover:text-white transition-all" data-tab="dashboard">Dashboard</button>
+        <button onclick="showTab('estoque')" class="tour-btn px-4 py-2 rounded-xl border border-white/10 text-sm font-medium text-slate-400 hover:text-white transition-all" data-tab="estoque">Estoque</button>
+        <button onclick="showTab('pdv')" class="tour-btn px-4 py-2 rounded-xl border border-white/10 text-sm font-medium text-slate-400 hover:text-white transition-all" data-tab="pdv">PDV</button>
+        <button onclick="showTab('finalizacao')" class="tour-btn px-4 py-2 rounded-xl border border-white/10 text-sm font-medium text-slate-400 hover:text-white transition-all" data-tab="finalizacao">Finalização</button>
+      </div>
+
+      <!-- Tab Contents -->
+      <div class="relative">
+        
+        <!-- LOGIN -->
+        <div id="tab-login" class="tab-content">
+          <div class="grid lg:grid-cols-2 gap-10 items-center">
+            <div class="space-y-5">
+              <h3 class="text-2xl font-bold">Tela de Login e Controle de Acesso</h3>
+              <p class="text-slate-400 leading-relaxed">
+                O sistema diferencia permissões desde o primeiro acesso. Operadores têm acesso limitado ao PDV e consulta de estoque. Administradores têm acesso total a cadastros, relatórios e configurações.
+              </p>
+              <ul class="space-y-2 text-sm text-slate-300">
+                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-cyan-electric"></i> Seletor de perfil (Operador / Administrador)</li>
+                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-cyan-electric"></i> Recuperação de senha integrada</li>
+                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-cyan-electric"></i> Autenticação segura via Firebase Auth</li>
+              </ul>
+            </div>
+            <div class="mockup-frame rounded-2xl p-1.5 shadow-deep max-w-md mx-auto w-full">
+              <div class="bg-dark-900 rounded-xl p-6 space-y-5">
+                <div class="text-center">
+                  <div class="w-12 h-12 mx-auto rounded-xl bg-cyan-electric/10 border border-cyan-electric/30 flex items-center justify-center mb-3">
+                    <svg class="w-6 h-6 text-cyan-electric" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                  </div>
+                  <p class="font-bold text-lg">Hexatech</p>
+                  <p class="text-xs text-slate-500 mt-1">Acesse sua conta</p>
+                </div>
+                <div class="space-y-3">
+                  <div>
+                    <label class="text-[10px] text-slate-400 uppercase tracking-wider">E-mail</label>
+                    <input type="email" placeholder="seu@email.com" class="w-full mt-1 px-3 py-2.5 rounded-xl bg-dark-700 border border-white/10 text-sm focus:outline-none focus:border-cyan-electric/50" readonly />
+                  </div>
+                  <div>
+                    <label class="text-[10px] text-slate-400 uppercase tracking-wider">Senha</label>
+                    <div class="relative mt-1">
+                      <input type="password" value="••••••••" class="w-full px-3 py-2.5 rounded-xl bg-dark-700 border border-white/10 text-sm focus:outline-none focus:border-cyan-electric/50" readonly />
+                      <i data-lucide="eye" class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500"></i>
+                    </div>
+                  </div>
+                  <div class="flex gap-2">
+                    <button class="flex-1 py-2 rounded-xl border border-cyan-electric/40 bg-cyan-electric/10 text-cyan-electric text-xs font-semibold">Operador</button>
+                    <button class="flex-1 py-2 rounded-xl border border-white/10 text-slate-400 text-xs font-medium">Administrador</button>
+                  </div>
+                  <button class="w-full py-3 rounded-xl bg-cyan-electric text-dark-900 font-bold text-sm btn-glow">Entrar</button>
+                  <p class="text-center text-xs text-slate-500 hover:text-cyan-electric cursor-pointer">Esqueci minha senha</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DASHBOARD -->
+        <div id="tab-dashboard" class="tab-content hidden">
+          <div class="grid lg:grid-cols-2 gap-10 items-center">
+            <div class="space-y-5">
+              <h3 class="text-2xl font-bold">Dashboard / Painel Principal</h3>
+              <p class="text-slate-400 leading-relaxed">
+                Visão geral em tempo real para o gestor acompanhar a saúde da loja. Métricas, gráficos, alertas e atalhos rápidos em um só lugar.
+              </p>
+              <ul class="space-y-2 text-sm text-slate-300">
+                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-cyan-electric"></i> Cards de métricas em tempo real</li>
+                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-cyan-electric"></i> Gráficos de giro e vendas por categoria</li>
+                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-cyan-electric"></i> Atalhos: Abrir PDV, Novo Produto, Inventário</li>
+              </ul>
+            </div>
+            <div class="mockup-frame rounded-2xl p-1.5 shadow-deep overflow-hidden">
+              <div class="bg-dark-900 rounded-xl flex" style="min-height:320px">
+                <div class="w-14 bg-dark-800 border-r border-white/5 flex flex-col items-center py-3 gap-3 shrink-0">
+                  <div class="w-8 h-8 rounded-lg bg-cyan-electric/15 flex items-center justify-center">
+                    <i data-lucide="layout-dashboard" class="w-4 h-4 text-cyan-electric"></i>
+                  </div>
+                  <i data-lucide="package" class="w-4 h-4 text-slate-500"></i>
+                  <i data-lucide="shopping-cart" class="w-4 h-4 text-slate-500"></i>
+                  <i data-lucide="bar-chart-2" class="w-4 h-4 text-slate-500"></i>
+                  <i data-lucide="settings" class="w-4 h-4 text-slate-500"></i>
+                  <div class="mt-auto"><i data-lucide="log-out" class="w-4 h-4 text-slate-500"></i></div>
+                </div>
+                <div class="flex-1 p-3 space-y-3 overflow-hidden">
+                  <div class="flex items-center justify-between">
+                    <p class="text-xs font-semibold">Dashboard</p>
+                    <span class="relative"><i data-lucide="bell" class="w-4 h-4 text-slate-400"></i><span class="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-cyan-electric"></span></span>
+                  </div>
+                  <div class="grid grid-cols-2 gap-2">
+                    <div class="bg-dark-700 rounded-lg p-2 border border-white/5">
+                      <p class="text-[9px] text-slate-500">Estoque em risco</p>
+                      <p class="text-sm font-bold text-amber-400">12</p>
+                    </div>
+                    <div class="bg-dark-700 rounded-lg p-2 border border-white/5">
+                      <p class="text-[9px] text-slate-500">Vendas do dia</p>
+                      <p class="text-sm font-bold text-emerald-400">R$ 4.280</p>
+                    </div>
+                    <div class="bg-dark-700 rounded-lg p-2 border border-white/5">
+                      <p class="text-[9px] text-slate-500">Ticket médio</p>
+                      <p class="text-sm font-bold">R$ 187</p>
+                    </div>
+                    <div class="bg-dark-700 rounded-lg p-2 border border-white/5">
+                      <p class="text-[9px] text-slate-500">Sem giro</p>
+                      <p class="text-sm font-bold text-red-400">8</p>
+                    </div>
+                  </div>
+                  <div class="bg-dark-700 rounded-lg p-2 border border-white/5">
+                    <p class="text-[9px] text-slate-400 mb-1">Giro de estoque</p>
+                    <div class="flex items-end gap-1 h-10">
+                      <div class="flex-1 bg-cyan-electric/30 rounded-t" style="height:40%"></div>
+                      <div class="flex-1 bg-cyan-electric/40 rounded-t" style="height:60%"></div>
+                      <div class="flex-1 bg-cyan-electric/50 rounded-t" style="height:50%"></div>
+                      <div class="flex-1 bg-cyan-electric/70 rounded-t" style="height:80%"></div>
+                      <div class="flex-1 bg-cyan-electric rounded-t" style="height:95%"></div>
+                    </div>
+                  </div>
+                  <div class="flex gap-1.5">
+                    <button class="flex-1 py-1.5 rounded-lg bg-cyan-electric/15 text-cyan-electric text-[9px] font-semibold">Abrir PDV</button>
+                    <button class="flex-1 py-1.5 rounded-lg bg-dark-700 text-slate-400 text-[9px]">Novo Produto</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ESTOQUE -->
+        <div id="tab-estoque" class="tab-content hidden">
+          <div class="grid lg:grid-cols-2 gap-10 items-center">
+            <div class="space-y-5">
+              <h3 class="text-2xl font-bold">Cadastro e Gestão de Estoque</h3>
+              <p class="text-slate-400 leading-relaxed">
+                Listagem completa com filtros avançados, indicadores visuais de estoque baixo e ponto de recompra. Fluxo: Listagem → Busca/Filtro → Inserção/Edição → Auditoria.
+              </p>
+              <ul class="space-y-2 text-sm text-slate-300">
+                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-cyan-electric"></i> Tabela com status coloridos</li>
+                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-cyan-electric"></i> Modal de novo produto completo</li>
+                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-cyan-electric"></i> Histórico de movimentações por item</li>
+              </ul>
+            </div>
+            <div class="mockup-frame rounded-2xl p-1.5 shadow-deep overflow-hidden">
+              <div class="bg-dark-900 rounded-xl p-3 space-y-2">
+                <div class="flex items-center justify-between gap-2">
+                  <div class="flex-1 relative">
+                    <i data-lucide="search" class="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-500"></i>
+                    <input class="w-full pl-8 pr-3 py-1.5 rounded-lg bg-dark-700 border border-white/10 text-[10px]" placeholder="Buscar produto..." readonly />
+                  </div>
+                  <button class="px-2.5 py-1.5 rounded-lg bg-cyan-electric text-dark-900 text-[10px] font-bold whitespace-nowrap">+ Novo</button>
+                </div>
+                <div class="overflow-x-auto">
+                  <table class="w-full text-[9px]">
+                    <thead>
+                      <tr class="text-slate-500 border-b border-white/5">
+                        <th class="text-left py-1.5 font-medium">Produto</th>
+                        <th class="text-left py-1.5 font-medium">Qtd</th>
+                        <th class="text-left py-1.5 font-medium">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/5">
+                      <tr>
+                        <td class="py-1.5 text-slate-300">Arduino Uno R3</td>
+                        <td class="py-1.5">48</td>
+                        <td class="py-1.5"><span class="px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400">Em estoque</span></td>
+                      </tr>
+                      <tr>
+                        <td class="py-1.5 text-slate-300">Cabo USB-C 2m</td>
+                        <td class="py-1.5">7</td>
+                        <td class="py-1.5"><span class="px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-400">Baixo</span></td>
+                      </tr>
+                      <tr>
+                        <td class="py-1.5 text-slate-300">Resistor 10kΩ</td>
+                        <td class="py-1.5">0</td>
+                        <td class="py-1.5"><span class="px-1.5 py-0.5 rounded bg-red-500/15 text-red-400">Zerado</span></td>
+                      </tr>
+                      <tr>
+                        <td class="py-1.5 text-slate-300">Multímetro DT-830</td>
+                        <td class="py-1.5">22</td>
+                        <td class="py-1.5"><span class="px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400">Em estoque</span></td>
+                      </tr>
+                      <tr>
+                        <td class="py-1.5 text-slate-300">Fonte 12V 2A</td>
+                        <td class="py-1.5">5</td>
+                        <td class="py-1.5"><span class="px-1.5 py-0.5 rounded bg-cyan-electric/15 text-cyan-electric">Recompra</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PDV -->
+        <div id="tab-pdv" class="tab-content hidden">
+          <div class="grid lg:grid-cols-2 gap-10 items-center">
+            <div class="space-y-5">
+              <h3 class="text-2xl font-bold">Frente de Caixa (PDV)</h3>
+              <p class="text-slate-400 leading-relaxed">
+                Interface otimizada para uso rápido no balcão. Fluxo: Leitura/busca → Adição de itens → Cálculo automático → Baixa imediata no estoque → Seleção de pagamento.
+              </p>
+              <ul class="space-y-2 text-sm text-slate-300">
+                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-cyan-electric"></i> Busca por código de barras com foco automático</li>
+                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-cyan-electric"></i> Indicador de estoque em tempo real</li>
+                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-cyan-electric"></i> Múltiplas formas de pagamento</li>
+              </ul>
+            </div>
+            <div class="mockup-frame rounded-2xl p-1.5 shadow-deep overflow-hidden">
+              <div class="bg-dark-900 rounded-xl p-3 space-y-2">
+                <div class="relative">
+                  <i data-lucide="scan-barcode" class="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-cyan-electric"></i>
+                  <input class="w-full pl-9 pr-3 py-2.5 rounded-xl bg-dark-700 border border-cyan-electric/30 text-xs focus:outline-none" placeholder="Código de barras ou nome..." readonly />
+                </div>
+                <div class="bg-dark-700 rounded-xl border border-white/5 divide-y divide-white/5">
+                  <div class="px-3 py-2 flex items-center justify-between text-[10px]">
+                    <div>
+                      <p class="text-slate-200 font-medium">Arduino Uno R3</p>
+                      <p class="text-slate-500">Qtd: 1 × R$ 89,90</p>
+                    </div>
+                    <p class="font-semibold">R$ 89,90</p>
+                  </div>
+                  <div class="px-3 py-2 flex items-center justify-between text-[10px]">
+                    <div>
+                      <p class="text-slate-200 font-medium">Cabo USB-C 2m</p>
+                      <p class="text-slate-500">Qtd: 2 × R$ 24,90</p>
+                    </div>
+                    <p class="font-semibold">R$ 49,80</p>
+                  </div>
+                </div>
+                <div class="bg-dark-700 rounded-xl p-3 space-y-1.5 border border-white/5">
+                  <div class="flex justify-between text-[10px] text-slate-400"><span>Subtotal</span><span>R$ 139,70</span></div>
+                  <div class="flex justify-between text-[10px] text-slate-400"><span>Desconto</span><span>R$ 0,00</span></div>
+                  <div class="flex justify-between text-sm font-bold border-t border-white/5 pt-1.5"><span>Total</span><span class="text-cyan-electric">R$ 139,70</span></div>
+                </div>
+                <div class="grid grid-cols-4 gap-1.5">
+                  <button class="py-1.5 rounded-lg bg-dark-700 text-[9px] text-slate-400 border border-white/5">Dinheiro</button>
+                  <button class="py-1.5 rounded-lg bg-dark-700 text-[9px] text-slate-400 border border-white/5">Crédito</button>
+                  <button class="py-1.5 rounded-lg bg-dark-700 text-[9px] text-slate-400 border border-white/5">Débito</button>
+                  <button class="py-1.5 rounded-lg bg-cyan-electric/15 text-[9px] text-cyan-electric border border-cyan-electric/30 font-semibold">PIX</button>
+                </div>
+                <button class="w-full py-2.5 rounded-xl bg-cyan-electric text-dark-900 font-bold text-xs">Finalizar Venda</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FINALIZAÇÃO -->
+        <div id="tab-finalizacao" class="tab-content hidden">
+          <div class="grid lg:grid-cols-2 gap-10 items-center">
+            <div class="space-y-5">
+              <h3 class="text-2xl font-bold">Finalização de Venda e Comprovante</h3>
+              <p class="text-slate-400 leading-relaxed">
+                Confirmação → Baixa definitiva no estoque → Geração do comprovante → Opção de impressão ou envio digital (WhatsApp/E-mail).
+              </p>
+              <ul class="space-y-2 text-sm text-slate-300">
+                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-cyan-electric"></i> Cálculo automático de troco</li>
+                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-cyan-electric"></i> Cupom digital e impressão</li>
+                <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-cyan-electric"></i> QR Code opcional no comprovante</li>
+              </ul>
+            </div>
+            <div class="mockup-frame rounded-2xl p-1.5 shadow-deep max-w-sm mx-auto w-full">
+              <div class="bg-dark-900 rounded-xl p-4 space-y-3">
+                <div class="text-center border-b border-white/5 pb-3">
+                  <p class="font-bold text-sm">Hexatech</p>
+                  <p class="text-[10px] text-slate-500">Loja Exemplo · CNPJ 00.000.000/0001-00</p>
+                  <p class="text-[10px] text-slate-500 mt-1">Venda #4521 · 30/10/2025 14:32</p>
+                </div>
+                <div class="space-y-1.5 text-[10px]">
+                  <div class="flex justify-between"><span class="text-slate-400">Arduino Uno R3 × 1</span><span>R$ 89,90</span></div>
+                  <div class="flex justify-between"><span class="text-slate-400">Cabo USB-C 2m × 2</span><span>R$ 49,80</span></div>
+                </div>
+                <div class="border-t border-white/5 pt-2 space-y-1 text-[10px]">
+                  <div class="flex justify-between text-slate-400"><span>Subtotal</span><span>R$ 139,70</span></div>
+                  <div class="flex justify-between font-bold text-sm"><span>Total</span><span class="text-cyan-electric">R$ 139,70</span></div>
+                  <div class="flex justify-between text-slate-400"><span>Pagamento</span><span>PIX</span></div>
+                </div>
+                <div class="text-center text-[10px] text-slate-500 pt-2 border-t border-white/5">
+                  Obrigado pela preferência!
+                </div>
+                <div class="flex gap-2 pt-1">
+                  <button class="flex-1 py-2 rounded-lg bg-dark-700 text-[10px] font-medium border border-white/10">Imprimir</button>
+                  <button class="flex-1 py-2 rounded-lg bg-cyan-electric/15 text-cyan-electric text-[10px] font-semibold border border-cyan-electric/30">WhatsApp</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-14">
+        <a href="#cta" class="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-cyan-electric text-dark-900 font-bold btn-glow">
+          <i data-lucide="calendar-check" class="w-5 h-5"></i>
+          Agendar Demonstração ao Vivo
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== DEPOIMENTOS ==================== -->
+  <section id="depoimentos" class="py-20 lg:py-28 bg-dark-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-14">
+        <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-4">O que dizem nossos clientes</h2>
+        <p class="text-slate-400 text-lg">Lojistas reais que transformaram a operação com a Hexatech</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-dark-700 rounded-2xl p-6 border border-white/5 card-hover">
+          <div class="flex gap-1 mb-4">
+            <i data-lucide="star" class="w-4 h-4 text-amber-400 fill-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 text-amber-400 fill-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 text-amber-400 fill-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 text-amber-400 fill-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 text-amber-400 fill-amber-400"></i>
+          </div>
+          <p class="text-slate-300 text-sm leading-relaxed mb-5">
+            “Antes perdíamos horas reconciliando estoque. Com a Hexatech a precisão chegou a 99,7% e as filas no balcão sumiram.”
+          </p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-electric to-cyan-soft flex items-center justify-center text-dark-900 font-bold text-sm">JS</div>
+            <div>
+              <p class="font-semibold text-sm">João Silva</p>
+              <p class="text-xs text-slate-500">Proprietário · TechParts SP</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-dark-700 rounded-2xl p-6 border border-white/5 card-hover">
+          <div class="flex gap-1 mb-4">
+            <i data-lucide="star" class="w-4 h-4 text-amber-400 fill-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 text-amber-400 fill-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 text-amber-400 fill-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 text-amber-400 fill-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 text-amber-400 fill-amber-400"></i>
+          </div>
+          <p class="text-slate-300 text-sm leading-relaxed mb-5">
+            “O alerta de recompra salvou nosso capital de giro. Identificamos 40 produtos parados que estavam congelando dinheiro.”
+          </p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white font-bold text-sm">MR</div>
+            <div>
+              <p class="font-semibold text-sm">Maria Rocha</p>
+              <p class="text-xs text-slate-500">Gerente · Circuito Eletrônicos</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-dark-700 rounded-2xl p-6 border border-white/5 card-hover">
+          <div class="flex gap-1 mb-4">
+            <i data-lucide="star" class="w-4 h-4 text-amber-400 fill-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 text-amber-400 fill-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 text-amber-400 fill-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 text-amber-400 fill-amber-400"></i>
+            <i data-lucide="star" class="w-4 h-4 text-amber-400 fill-amber-400"></i>
+          </div>
+          <p class="text-slate-300 text-sm leading-relaxed mb-5">
+            “O PDV é absurdamente rápido. Meus operadores aprenderam em um dia e a baixa automática eliminou as divergências de caixa.”
+          </p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-dark-900 font-bold text-sm">AL</div>
+            <div>
+              <p class="font-semibold text-sm">André Lima</p>
+              <p class="text-xs text-slate-500">Diretor · Byte & Chip</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== CTA FINAL ==================== -->
+  <section id="cta" class="py-20 lg:py-28 relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-dark-800 via-dark-700 to-dark-800"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-cyan-electric/5 rounded-full blur-[100px] pointer-events-none"></div>
+    
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 relative text-center">
+      <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
+        Pronto para assumir o controle total da sua loja de eletrônicos?
+      </h2>
+      <p class="text-slate-400 text-lg mb-10">
+        Sem compromisso. Demonstração personalizada em até 24h.
+      </p>
+
+      <form id="leadForm" class="space-y-4 max-w-md mx-auto">
+        <div>
+          <input 
+            type="email" 
+            id="emailInput"
+            name="email"
+            required
+            placeholder="Seu e-mail corporativo"
+            class="w-full px-5 py-4 rounded-xl bg-dark-900 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-electric/50 focus:ring-1 focus:ring-cyan-electric/30 transition"
+          />
+        </div>
+        <button 
+          type="submit" 
+          id="submitBtn"
+          class="w-full py-4 rounded-xl bg-cyan-electric text-dark-900 font-bold text-base btn-glow flex items-center justify-center gap-2"
+        >
+          <i data-lucide="send" class="w-5 h-5"></i>
+          <span>Falar com Especialista</span>
+        </button>
+        <p id="formMessage" class="text-sm hidden"></p>
+      </form>
+
+      <p class="text-xs text-slate-500 mt-6">
+        Seus dados estão seguros. Não enviamos spam.
+      </p>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="bg-dark-900 border-t border-white/5 pt-16 pb-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-4 gap-10 mb-12">
+        <div class="md:col-span-1">
+          <a href="#" class="flex items-center gap-2.5 mb-4">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-electric/20 to-cyan-soft/10 border border-cyan-electric/30 flex items-center justify-center">
+              <svg class="w-4 h-4 text-cyan-electric" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            </div>
+            <span class="text-lg font-bold">Hexatech</span>
+          </a>
+          <p class="text-sm text-slate-500 leading-relaxed">
+            Sistema especialista em gestão de varejo de hardware e eletrônicos.
+          </p>
+        </div>
+
+        <div>
+          <p class="font-semibold text-sm mb-4">Produto</p>
+          <ul class="space-y-2.5 text-sm text-slate-400">
+            <li><a href="#solucoes" class="hover:text-cyan-electric transition">Soluções</a></li>
+            <li><a href="#recursos" class="hover:text-cyan-electric transition">Recursos</a></li>
+            <li><a href="#tour" class="hover:text-cyan-electric transition">Plataforma</a></li>
+            <li><a href="#beneficios" class="hover:text-cyan-electric transition">Benefícios</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <p class="font-semibold text-sm mb-4">Empresa</p>
+          <ul class="space-y-2.5 text-sm text-slate-400">
+            <li><a href="#" class="hover:text-cyan-electric transition">Sobre</a></li>
+            <li><a href="#" class="hover:text-cyan-electric transition">Blog</a></li>
+            <li><a href="#" class="hover:text-cyan-electric transition">Contato</a></li>
+            <li><a href="#cta" class="hover:text-cyan-electric transition">Demonstração</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <p class="font-semibold text-sm mb-4">Legal</p>
+          <ul class="space-y-2.5 text-sm text-slate-400">
+            <li><a href="#" class="hover:text-cyan-electric transition">Termos de Uso</a></li>
+            <li><a href="#" class="hover:text-cyan-electric transition">Política de Privacidade</a></li>
+          </ul>
+          <div class="flex items-center gap-3 mt-5">
+            <span class="px-2 py-1 rounded bg-dark-700 border border-white/5 text-[10px] text-slate-400">SSL</span>
+            <span class="px-2 py-1 rounded bg-dark-700 border border-white/5 text-[10px] text-slate-400">LGPD</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8 border-t border-white/5">
+        <p class="text-xs text-slate-500">© 2025 Hexatech. Todos os direitos reservados.</p>
+        <div class="flex items-center gap-4">
+          <a href="#" class="text-slate-500 hover:text-cyan-electric transition" aria-label="LinkedIn"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+          <a href="#" class="text-slate-500 hover:text-cyan-electric transition" aria-label="Instagram"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+          <a href="#" class="text-slate-500 hover:text-cyan-electric transition" aria-label="YouTube"><i data-lucide="youtube" class="w-5 h-5"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== SCRIPTS ==================== -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-analytics.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyC0wYQuqkET4O7uAjzgJBlHi8vnsQwFE0Q",
+      authDomain: "projeto-do-kaio.firebaseapp.com",
+      projectId: "projeto-do-kaio",
+      storageBucket: "projeto-do-kaio.firebasestorage.app",
+      messagingSenderId: "864756497939",
+      appId: "1:864756497939:web:1eb998f470bc12195089e6",
+      measurementId: "G-L0D9G0KS6Z"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    try { getAnalytics(app); } catch(e) {}
+
+    const form = document.getElementById('leadForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const formMessage = document.getElementById('formMessage');
+    const emailInput = document.getElementById('emailInput');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = emailInput.value.trim();
+      if (!email) return;
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="animate-pulse">Enviando...</span>';
+
+      try {
+        await addDoc(collection(db, 'leads'), {
+          email: email,
+          origem: 'landing-hexatech',
+          status: 'novo',
+          criadoEm: serverTimestamp()
+        });
+
+        formMessage.textContent = 'Recebemos seu e-mail! Entraremos em contato em até 24h.';
+        formMessage.className = 'text-sm text-emerald-400';
+        emailInput.value = '';
+      } catch (err) {
+        console.error(err);
+        formMessage.textContent = 'Erro ao enviar. Tente novamente ou fale conosco pelo WhatsApp.';
+        formMessage.className = 'text-sm text-red-400';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i data-lucide="send" class="w-5 h-5"></i><span>Falar com Especialista</span>';
+        lucide.createIcons();
+      }
+    });
+  </script>
+
+  <script>
+    lucide.createIcons();
+
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    menuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('open');
+      const icon = menuBtn.querySelector('i');
+      if (mobileMenu.classList.contains('open')) {
+        icon.setAttribute('data-lucide', 'x');
+      } else {
+        icon.setAttribute('data-lucide', 'menu');
+      }
+      lucide.createIcons();
+    });
+
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('open');
+        menuBtn.querySelector('i').setAttribute('data-lucide', 'menu');
+        lucide.createIcons();
+      });
+    });
+
+    function showTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.getElementById('tab-' + tabId).classList.remove('hidden');
+      
+      document.querySelectorAll('.tour-btn').forEach(btn => {
+        btn.classList.remove('active');
+        btn.classList.add('text-slate-400');
+      });
+      const activeBtn = document.querySelector(`[data-tab="${tabId}"]`);
+      activeBtn.classList.add('active');
+      activeBtn.classList.remove('text-slate-400');
+      
+      lucide.createIcons();
+    }
+    window.showTab = showTab;
+
+    window.addEventListener('scroll', () => {
+      const header = document.getElementById('header');
+      if (window.scrollY > 20) {
+        header.classList.add('shadow-lg');
+      } else {
+        header.classList.remove('shadow-lg');
+      }
+    });
+  </script>
+</body>
+</html>
