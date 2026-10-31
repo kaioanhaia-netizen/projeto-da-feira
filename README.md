@@ -67,7 +67,7 @@ Não é necessário instalar dependências nem rodar servidor.
 
 ### Login do painel
 
-| Campo | Valor |
+
 
 | Usuário | `adm` |
 | Senha | `123456` |
